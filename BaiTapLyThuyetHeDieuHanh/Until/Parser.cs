@@ -9,6 +9,21 @@ namespace BaiTapLyThuyetHeDieuHanh
         private Scanner _scanner;
         private Token _token;
 
+
+        public static string EOF = "EOF";
+        public static string ADD = "+";
+        public static string SUB = "-";
+        public static string MULTI = "*";
+        public static string DIVIDE = "/";
+        public static string LPAREN = "(";
+        public static string RPAREN = ")";
+        public static string GREATERTHAN = ">";
+        public static string GREATERTHANORQUEAL = ">=";
+        public static string LESSTHAN = "<";
+        public static string LESSTHANOREQUAL = "<=";
+        public static string EQUAL = "==";
+
+
         public Parser(Scanner scanner)
         {
             this._scanner = scanner;

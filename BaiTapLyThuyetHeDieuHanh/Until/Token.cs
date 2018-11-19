@@ -24,51 +24,51 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         public static Token EOF
         {
-            get { return new Token("EOF", TokenType.EOF); }
+            get { return new Token(Parser.EOF, TokenType.EOF); }
         }
         public static Token Add
         {
-            get { return new Token("+", TokenType.Add); }
+            get { return new Token(Parser.ADD, TokenType.Add); }
         }
         public static Token Subtract
         {
-            get { return new Token("-", TokenType.Subtract); }
+            get { return new Token(Parser.SUB, TokenType.Subtract); }
         }
         public static Token Multiply
         {
-            get { return new Token("*", TokenType.Multiply); }
+            get { return new Token(Parser.MULTI, TokenType.Multiply); }
         }
         public static Token Divide
         {
-            get { return new Token("/", TokenType.Divide); }
+            get { return new Token(Parser.DIVIDE, TokenType.Divide); }
         }
         public static Token LParen
         {
-            get { return new Token("(", TokenType.LParen); }
+            get { return new Token(Parser.LPAREN, TokenType.LParen); }
         }
         public static Token RParen
         {
-            get { return new Token(")", TokenType.RParen); }
+            get { return new Token(Parser.RPAREN, TokenType.RParen); }
         }
         public static Token Equal
         {
-            get { return new Token("==", TokenType.Equal); }
+            get { return new Token(Parser.EQUAL, TokenType.Equal); }
         }
         public static Token GreaterThan
         {
-            get { return new Token(">", TokenType.GreaterThan); }
+            get { return new Token(Parser.GREATERTHAN, TokenType.GreaterThan); }
         }
         public static Token GreaterThanOrEqual
         {
-            get { return new Token(">=", TokenType.GreaterThanOrEqual); }
+            get { return new Token(Parser.GREATERTHANORQUEAL, TokenType.GreaterThanOrEqual); }
         }
         public static Token LessThan
         {
-            get { return new Token("<", TokenType.LessThan); }
+            get { return new Token(Parser.LESSTHAN, TokenType.LessThan); }
         }
         public static Token LessThanOrEqual
         {
-            get { return new Token("<=", TokenType.LessThanOrEqual); }
+            get { return new Token(Parser.LESSTHANOREQUAL, TokenType.LessThanOrEqual); }
         }
         #endregion
     }
