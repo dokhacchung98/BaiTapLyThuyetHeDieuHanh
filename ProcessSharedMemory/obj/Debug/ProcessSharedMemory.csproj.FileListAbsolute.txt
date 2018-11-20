@@ -8,3 +8,5 @@ C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh
 C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.csproj.CopyComplete
 C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.exe
 C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.Form1.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.csprojAssemblyReference.cache

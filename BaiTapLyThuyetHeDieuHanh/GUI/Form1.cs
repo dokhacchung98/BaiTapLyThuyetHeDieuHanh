@@ -1,18 +1,40 @@
 ﻿using MaterialSkin;
+using PipesClientTest;
+using PipesServerTest;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.IO.MemoryMappedFiles;
+using System.IO.Pipes;
 using System.Messaging;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BaiTapLyThuyetHeDieuHanh
 {
     public partial class FormMain : MaterialSkin.Controls.MaterialForm
     {
+        //là string mà người dùng nhập
         private StringBuilder stringBuilder;
+        //giá trị khi click radio button: 1 là gửi theo message queue, 2 là gửi theo share memory, 3 là gửi theo pipe
         private int _communicationType;
+        //đây là tên server mà bên process chính gửi tới
+        private static string nameServerSend = "serverLTHDH1";
+        //đây là tên server sẽ nhận kết quả sau khi tính toán
+        private static string nameServerReceiver = "serverLTHDH2";
+
+        //khởi tọa delegate
+        public delegate void NewMessageDelegate(string NewMessage);
+
+        //server gửi pipe
+        private PipeServer _pipeServer;
+        //client gửi pipe
+        private PipeClient _pipeClient;
+        private string fileSend = "file-send";
+        private string fileReceiver = "file-rêciver";
 
         public FormMain()
         {
@@ -29,16 +51,10 @@ namespace BaiTapLyThuyetHeDieuHanh
             );
             stringBuilder = new StringBuilder("");
 
-            SetupButton();
-        }
+            _pipeServer = new PipeServer();
+            _pipeServer.PipeMessage += new DelegateMessage(ListenResultPipe);
 
-        private void handleUsingKeyboard()
-        {
-            while (true)
-            {
-                Console.WriteLine("a");
-                Thread.Sleep(10000);
-            }
+            SetupButton();
         }
 
         /*Khởi tạo các button, và thay đổi kích thước của chúng*/
@@ -106,14 +122,18 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         }
 
-        private void SetupFont()
-        {
-
-        }
-
+        /*Khởi tạo server lắng nge client từ lúc bắt đầu*/
         private void FormMain_Load(object sender, EventArgs e)
         {
-
+            try
+            {
+                _pipeServer.Listen(nameServerReceiver);
+                Console.WriteLine("Listening success");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Listening faild");
+            }
         }
 
         #region XuLyClick
@@ -276,6 +296,10 @@ namespace BaiTapLyThuyetHeDieuHanh
                 stringBuilder = new StringBuilder(value);
                 UpdateLaybelExpressMath();
             }
+            else
+            {
+                txtMathExpression.Text = "0";
+            }
         }
 
         private void cbMessageQueue_CheckedChanged(object sender, EventArgs e)
@@ -321,30 +345,38 @@ namespace BaiTapLyThuyetHeDieuHanh
             {
                 StartInfo =
                 {
+                    //đường dẫn tới process
                     FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\bin\Debug\ProcessMessageQueue.exe",
-                    CreateNoWindow = true,
+                    //không hiển thị màn hình process con
+                    CreateNoWindow = false,
                     UseShellExecute = false
                 }
             };
-
+            //bắt đầu mở process con
             anotherProcess.Start();
 
+            //khởi tạo message queue
             using (MessageQueue msgQueue = new MessageQueue())
             {
+                //baitaplthdhSend là tên private queue
                 msgQueue.Path = @".\private$\baitaplthdhSend";
                 if (!MessageQueue.Exists(msgQueue.Path))
                 {
+                    //khởi tạo messagequeue
                     MessageQueue.Create(msgQueue.Path);
                 }
+                //Khởi tạo 1 tin nhắn mới
                 System.Messaging.Message message = new System.Messaging.Message();
+                //gán thân của tin nhắn là thông tin người dùng nhập
                 message.Body = stringBuilder.ToString();
-                message.BodyType = 1;
+                //gửi sang process processmessagequeue
                 msgQueue.Send(message);
 
                 ListeningResultMessageQueue(anotherProcess);
             }
         }
 
+        //lắng nghe kết quả trả về từ process thứ 2 sau khi tính toán xong trả về
         private void ListeningResultMessageQueue(Process process)
         {
             using (MessageQueue msgQueue = new MessageQueue())
@@ -363,25 +395,104 @@ namespace BaiTapLyThuyetHeDieuHanh
             }
         }
 
+        //gửi bằng giao thức shared memory
         private void SendWithSharedMemory()
         {
+            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSend, 10000))
+            {
+                using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                {
+                    byte[] textBytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
+                    viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
+                }
 
+                var anotherProcess = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.exe",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    }
+                };
+
+                anotherProcess.Start();
+                //ListenResultShareMemory();
+                //Thread.Sleep(100);
+            }
         }
+
 
         private void ListenResultShareMemory()
         {
-
+            try
+            {
+                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.OpenExisting(fileReceiver))
+                {
+                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                    {
+                        byte[] bytes = new byte[100];
+                        int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
+                        string text = Encoding.UTF8.GetString(bytes).Trim('\0');
+                        txtResult.Text = text;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("main: " + e.Message);
+            }
         }
 
+        //gửi bằng giao thức pipe
         private void SendWithPipe()
         {
+            var anotherProcess = new Process
+            {
+                StartInfo =
+                    {
+                        FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\bin\Debug\ProcessPipe.exe",
+                        CreateNoWindow = false,
+                        UseShellExecute = false
+                    }
+            };
+            //chạy tiến trình con
+            anotherProcess.Start();
 
+            //khởi tạo client để gửi
+            _pipeClient = new PipeClient();
+            _pipeClient.Send(stringBuilder.ToString(), nameServerSend, 1000);
         }
 
-        private void ListenResultPipe()
+        //lắng nghe bên pipe trả kết quả về
+        private void ListenResultPipe(string message)
         {
-
+            try
+            {
+                //nếu không yêu cầu sẽ nhảy vào if, ngược lại sẽ nhảy vào else và hiển thị kết quả
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new NewMessageDelegate(ListenResultPipe), message);
+                }
+                else
+                {
+                    //hiển thị kết quả
+                    txtResult.Text = message;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
+
+        //Khi đóng form trả server và client về null
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _pipeServer.PipeMessage -= new DelegateMessage(ListenResultPipe);
+            _pipeServer = null;
+            _pipeClient = null;
+        }
     }
 }
