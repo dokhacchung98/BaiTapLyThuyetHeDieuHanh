@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txtMathExpression = new MaterialSkin.Controls.MaterialLabel();
             this.txtResult = new MaterialSkin.Controls.MaterialLabel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelNumber = new System.Windows.Forms.Panel();
             this.btnDelete = new MaterialSkin.Controls.MaterialRaisedButton();
             this.btnClear = new MaterialSkin.Controls.MaterialRaisedButton();
             this.btnOk = new MaterialSkin.Controls.MaterialRaisedButton();
@@ -56,15 +57,14 @@
             this.btnValue3 = new MaterialSkin.Controls.MaterialRaisedButton();
             this.btnValue2 = new MaterialSkin.Controls.MaterialRaisedButton();
             this.btnValue1 = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelChose = new System.Windows.Forms.Panel();
             this.cbPipe = new MaterialSkin.Controls.MaterialRadioButton();
             this.cbSharedMemory = new MaterialSkin.Controls.MaterialRadioButton();
             this.cbMessageQueue = new MaterialSkin.Controls.MaterialRadioButton();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.txtMathExpression = new MaterialSkin.Controls.MaterialLabel();
             this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.panelNumber.SuspendLayout();
+            this.panelChose.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -76,6 +76,20 @@
             this.panel1.Size = new System.Drawing.Size(664, 117);
             this.panel1.TabIndex = 0;
             // 
+            // txtMathExpression
+            // 
+            this.txtMathExpression.Depth = 0;
+            this.txtMathExpression.Font = new System.Drawing.Font("Roboto", 11F);
+            this.txtMathExpression.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.txtMathExpression.Location = new System.Drawing.Point(3, 11);
+            this.txtMathExpression.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtMathExpression.Name = "txtMathExpression";
+            this.txtMathExpression.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.txtMathExpression.Size = new System.Drawing.Size(658, 42);
+            this.txtMathExpression.TabIndex = 2;
+            this.txtMathExpression.Text = "0";
+            this.txtMathExpression.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // txtResult
             // 
             this.txtResult.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -83,45 +97,46 @@
             this.txtResult.Enabled = false;
             this.txtResult.Font = new System.Drawing.Font("Roboto", 11F);
             this.txtResult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.txtResult.Location = new System.Drawing.Point(33, 67);
+            this.txtResult.Location = new System.Drawing.Point(3, 64);
             this.txtResult.MouseState = MaterialSkin.MouseState.HOVER;
             this.txtResult.Name = "txtResult";
-            this.txtResult.Size = new System.Drawing.Size(612, 24);
+            this.txtResult.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.txtResult.Size = new System.Drawing.Size(658, 42);
             this.txtResult.TabIndex = 1;
             this.txtResult.Text = "0";
             this.txtResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // panel2
+            // panelNumber
             // 
-            this.panel2.Controls.Add(this.btnDelete);
-            this.panel2.Controls.Add(this.btnClear);
-            this.panel2.Controls.Add(this.btnOk);
-            this.panel2.Controls.Add(this.btnEqual);
-            this.panel2.Controls.Add(this.btnValue0);
-            this.panel2.Controls.Add(this.btnLessThanOrEqual);
-            this.panel2.Controls.Add(this.btnDot);
-            this.panel2.Controls.Add(this.btnLessThan);
-            this.panel2.Controls.Add(this.btnDivide);
-            this.panel2.Controls.Add(this.btnGreaterThanOrEqual);
-            this.panel2.Controls.Add(this.btnMulti);
-            this.panel2.Controls.Add(this.btnGreaterThan);
-            this.panel2.Controls.Add(this.btnSub);
-            this.panel2.Controls.Add(this.btnAdd);
-            this.panel2.Controls.Add(this.btnRParen);
-            this.panel2.Controls.Add(this.btnLParen);
-            this.panel2.Controls.Add(this.btnValue9);
-            this.panel2.Controls.Add(this.btnValue8);
-            this.panel2.Controls.Add(this.btnValue7);
-            this.panel2.Controls.Add(this.btnValue6);
-            this.panel2.Controls.Add(this.btnValue5);
-            this.panel2.Controls.Add(this.btnValue4);
-            this.panel2.Controls.Add(this.btnValue3);
-            this.panel2.Controls.Add(this.btnValue2);
-            this.panel2.Controls.Add(this.btnValue1);
-            this.panel2.Location = new System.Drawing.Point(225, 199);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(451, 419);
-            this.panel2.TabIndex = 1;
+            this.panelNumber.Controls.Add(this.btnDelete);
+            this.panelNumber.Controls.Add(this.btnClear);
+            this.panelNumber.Controls.Add(this.btnOk);
+            this.panelNumber.Controls.Add(this.btnEqual);
+            this.panelNumber.Controls.Add(this.btnValue0);
+            this.panelNumber.Controls.Add(this.btnLessThanOrEqual);
+            this.panelNumber.Controls.Add(this.btnDot);
+            this.panelNumber.Controls.Add(this.btnLessThan);
+            this.panelNumber.Controls.Add(this.btnDivide);
+            this.panelNumber.Controls.Add(this.btnGreaterThanOrEqual);
+            this.panelNumber.Controls.Add(this.btnMulti);
+            this.panelNumber.Controls.Add(this.btnGreaterThan);
+            this.panelNumber.Controls.Add(this.btnSub);
+            this.panelNumber.Controls.Add(this.btnAdd);
+            this.panelNumber.Controls.Add(this.btnRParen);
+            this.panelNumber.Controls.Add(this.btnLParen);
+            this.panelNumber.Controls.Add(this.btnValue9);
+            this.panelNumber.Controls.Add(this.btnValue8);
+            this.panelNumber.Controls.Add(this.btnValue7);
+            this.panelNumber.Controls.Add(this.btnValue6);
+            this.panelNumber.Controls.Add(this.btnValue5);
+            this.panelNumber.Controls.Add(this.btnValue4);
+            this.panelNumber.Controls.Add(this.btnValue3);
+            this.panelNumber.Controls.Add(this.btnValue2);
+            this.panelNumber.Controls.Add(this.btnValue1);
+            this.panelNumber.Location = new System.Drawing.Point(225, 199);
+            this.panelNumber.Name = "panelNumber";
+            this.panelNumber.Size = new System.Drawing.Size(451, 419);
+            this.panelNumber.TabIndex = 1;
             // 
             // btnDelete
             // 
@@ -337,7 +352,7 @@
             this.btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnAdd.Depth = 0;
             this.btnAdd.Icon = null;
-            this.btnAdd.Location = new System.Drawing.Point(169, 93);
+            this.btnAdd.Location = new System.Drawing.Point(167, 93);
             this.btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Primary = true;
@@ -523,16 +538,16 @@
             this.btnValue1.UseVisualStyleBackColor = true;
             this.btnValue1.Click += new System.EventHandler(this.btnValue1_Click);
             // 
-            // panel3
+            // panelChose
             // 
-            this.panel3.Controls.Add(this.cbPipe);
-            this.panel3.Controls.Add(this.cbSharedMemory);
-            this.panel3.Controls.Add(this.cbMessageQueue);
-            this.panel3.Controls.Add(this.materialLabel1);
-            this.panel3.Location = new System.Drawing.Point(12, 199);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(207, 419);
-            this.panel3.TabIndex = 1;
+            this.panelChose.Controls.Add(this.cbPipe);
+            this.panelChose.Controls.Add(this.cbSharedMemory);
+            this.panelChose.Controls.Add(this.cbMessageQueue);
+            this.panelChose.Controls.Add(this.materialLabel1);
+            this.panelChose.Location = new System.Drawing.Point(12, 199);
+            this.panelChose.Name = "panelChose";
+            this.panelChose.Size = new System.Drawing.Size(207, 419);
+            this.panelChose.TabIndex = 1;
             // 
             // cbPipe
             // 
@@ -550,6 +565,7 @@
             this.cbPipe.TabStop = true;
             this.cbPipe.Text = "Pipe";
             this.cbPipe.UseVisualStyleBackColor = true;
+            this.cbPipe.CheckedChanged += new System.EventHandler(this.cbPipe_CheckedChanged);
             // 
             // cbSharedMemory
             // 
@@ -567,6 +583,7 @@
             this.cbSharedMemory.TabStop = true;
             this.cbSharedMemory.Text = "Shared Memory";
             this.cbSharedMemory.UseVisualStyleBackColor = true;
+            this.cbSharedMemory.CheckedChanged += new System.EventHandler(this.cbSharedMemory_CheckedChanged);
             // 
             // cbMessageQueue
             // 
@@ -585,6 +602,7 @@
             this.cbMessageQueue.TabStop = true;
             this.cbMessageQueue.Text = "Message Queue";
             this.cbMessageQueue.UseVisualStyleBackColor = true;
+            this.cbMessageQueue.CheckedChanged += new System.EventHandler(this.cbMessageQueue_CheckedChanged);
             // 
             // materialLabel1
             // 
@@ -599,36 +617,23 @@
             this.materialLabel1.TabIndex = 0;
             this.materialLabel1.Text = "Cơ chế giao tiếp";
             // 
-            // txtMathExpression
-            // 
-            this.txtMathExpression.Depth = 0;
-            this.txtMathExpression.Font = new System.Drawing.Font("Roboto", 11F);
-            this.txtMathExpression.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.txtMathExpression.Location = new System.Drawing.Point(33, 19);
-            this.txtMathExpression.MouseState = MaterialSkin.MouseState.HOVER;
-            this.txtMathExpression.Name = "txtMathExpression";
-            this.txtMathExpression.Size = new System.Drawing.Size(612, 36);
-            this.txtMathExpression.TabIndex = 2;
-            this.txtMathExpression.Text = "0";
-            this.txtMathExpression.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(688, 630);
-            this.Controls.Add(this.panel3);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panelChose);
+            this.Controls.Add(this.panelNumber);
             this.Controls.Add(this.panel1);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "B7- Đỗ Khắc Chung & Phạm Tiến Nam";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.panel1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.panelNumber.ResumeLayout(false);
+            this.panelNumber.PerformLayout();
+            this.panelChose.ResumeLayout(false);
+            this.panelChose.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -636,8 +641,8 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelNumber;
+        private System.Windows.Forms.Panel panelChose;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialRadioButton cbPipe;
         private MaterialSkin.Controls.MaterialRadioButton cbSharedMemory;

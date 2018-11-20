@@ -1,0 +1,10 @@
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.exe.config
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\MaterialSkin.dll
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.Properties.Resources.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.csproj.GenerateResource.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.csproj.CopyComplete
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\obj\Debug\ProcessSharedMemory.pdb

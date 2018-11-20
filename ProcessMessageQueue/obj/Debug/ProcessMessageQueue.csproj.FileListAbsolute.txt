@@ -1,0 +1,12 @@
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\bin\Debug\ProcessMessageQueue.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\bin\Debug\ProcessMessageQueue.exe.config
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\bin\Debug\ProcessMessageQueue.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.Form1.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.Properties.Resources.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.csproj.GenerateResource.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.csprojAssemblyReference.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\bin\Debug\MaterialSkin.dll
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\obj\Debug\ProcessMessageQueue.csproj.CopyComplete

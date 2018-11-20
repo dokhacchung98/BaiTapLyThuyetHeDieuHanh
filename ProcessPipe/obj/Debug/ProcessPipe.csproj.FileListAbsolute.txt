@@ -1,0 +1,11 @@
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\bin\Debug\ProcessPipe.exe.config
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\bin\Debug\ProcessPipe.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\bin\Debug\ProcessPipe.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.csprojAssemblyReference.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.Properties.Resources.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.csproj.GenerateResource.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\bin\Debug\MaterialSkin.dll
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessPipe\obj\Debug\ProcessPipe.csproj.CopyComplete

@@ -1,25 +1,23 @@
-﻿using BaiTapLyThuyetHeDieuHanh.CallBack;
-using MaterialSkin;
+﻿using MaterialSkin;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
+using System.Messaging;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BaiTapLyThuyetHeDieuHanh
 {
     public partial class FormMain : MaterialSkin.Controls.MaterialForm
     {
-        private string expressMath = "";
         private StringBuilder stringBuilder;
+        private int _communicationType;
 
         public FormMain()
         {
             InitializeComponent();
+            _communicationType = 1;
             MaterialSkinManager materialSkinManager = MaterialSkinManager.Instance;
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
@@ -29,16 +27,21 @@ namespace BaiTapLyThuyetHeDieuHanh
                 Primary.Blue500, Accent.LightBlue200,
                 TextShade.WHITE
             );
-
-
-            stringBuilder = new StringBuilder(expressMath);
-
-            Font font = new Font("", 22);
-            txtMathExpression.Font = font;
+            stringBuilder = new StringBuilder("");
 
             SetupButton();
         }
 
+        private void handleUsingKeyboard()
+        {
+            while (true)
+            {
+                Console.WriteLine("a");
+                Thread.Sleep(10000);
+            }
+        }
+
+        /*Khởi tạo các button, và thay đổi kích thước của chúng*/
         private void SetupButton()
         {
             btnValue1.AutoSize = false;
@@ -91,6 +94,16 @@ namespace BaiTapLyThuyetHeDieuHanh
             btnClear.Size = new Size(116, 48);
             btnDelete.AutoSize = false;
             btnDelete.Size = new Size(116, 48);
+
+            txtMathExpression.BorderStyle = BorderStyle.FixedSingle;
+            txtResult.BorderStyle = BorderStyle.FixedSingle;
+
+            panelChose.BackColor = Color.FromArgb(242, 242, 242);
+            panelNumber.BackColor = Color.FromArgb(242, 242, 242);
+
+            panelChose.BorderStyle = BorderStyle.FixedSingle;
+            panelNumber.BorderStyle = BorderStyle.FixedSingle;
+
         }
 
         private void SetupFont()
@@ -103,11 +116,7 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         }
 
-        private void callProcess()
-        {
-
-        }
-
+        #region XuLyClick
         private void btnValue1_Click(object sender, EventArgs e)
         {
             stringBuilder.Append("1");
@@ -168,6 +177,7 @@ namespace BaiTapLyThuyetHeDieuHanh
             UpdateLaybelExpressMath();
         }
 
+        /*Cập nhật lại giao diện khi người dùng click*/
         private void UpdateLaybelExpressMath()
         {
             txtMathExpression.Text = stringBuilder.ToString();
@@ -248,7 +258,7 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-
+            CallProcess();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -267,5 +277,111 @@ namespace BaiTapLyThuyetHeDieuHanh
                 UpdateLaybelExpressMath();
             }
         }
+
+        private void cbMessageQueue_CheckedChanged(object sender, EventArgs e)
+        {
+            _communicationType = 1;
+        }
+
+        private void cbSharedMemory_CheckedChanged(object sender, EventArgs e)
+        {
+            _communicationType = 2;
+        }
+
+        private void cbPipe_CheckedChanged(object sender, EventArgs e)
+        {
+            _communicationType = 3;
+        }
+
+        #endregion
+
+        /*Xử lý khi người dùng tiến hành tính toán: tức là click vào button bằng*/
+        private void CallProcess()
+        {
+            switch (_communicationType)
+            {
+                case 1:
+                    SendWithMessageQueue();
+                    break;
+                case 2:
+                    SendWithSharedMemory();
+                    break;
+                case 3:
+                    SendWithPipe();
+                    break;
+            }
+        }
+
+
+        /*Gửi dữ liệu giữa 2 process sử dụng message queue*/
+        private void SendWithMessageQueue()
+        {
+
+            var anotherProcess = new Process
+            {
+                StartInfo =
+                {
+                    FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessMessageQueue\bin\Debug\ProcessMessageQueue.exe",
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                }
+            };
+
+            anotherProcess.Start();
+
+            using (MessageQueue msgQueue = new MessageQueue())
+            {
+                msgQueue.Path = @".\private$\baitaplthdhSend";
+                if (!MessageQueue.Exists(msgQueue.Path))
+                {
+                    MessageQueue.Create(msgQueue.Path);
+                }
+                System.Messaging.Message message = new System.Messaging.Message();
+                message.Body = stringBuilder.ToString();
+                message.BodyType = 1;
+                msgQueue.Send(message);
+
+                ListeningResultMessageQueue(anotherProcess);
+            }
+        }
+
+        private void ListeningResultMessageQueue(Process process)
+        {
+            using (MessageQueue msgQueue = new MessageQueue())
+            {
+                msgQueue.Path = @".\private$\baitaplthdhRecive";
+                if (!MessageQueue.Exists(msgQueue.Path))
+                {
+                    MessageQueue.Create(msgQueue.Path);
+                }
+                System.Messaging.Message message = new System.Messaging.Message();
+                message = msgQueue.Receive();
+                message.Formatter = new XmlMessageFormatter(new string[] { "System.String, mscorlib" });
+                string m = message.Body.ToString();
+                txtResult.Text = m;
+                process.Kill();
+            }
+        }
+
+        private void SendWithSharedMemory()
+        {
+
+        }
+
+        private void ListenResultShareMemory()
+        {
+
+        }
+
+        private void SendWithPipe()
+        {
+
+        }
+
+        private void ListenResultPipe()
+        {
+
+        }
+
     }
 }

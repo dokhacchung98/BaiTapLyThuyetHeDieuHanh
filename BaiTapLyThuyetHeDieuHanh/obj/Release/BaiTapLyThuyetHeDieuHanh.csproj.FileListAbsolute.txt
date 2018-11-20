@@ -1,0 +1,12 @@
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\bin\Release\BaiTapLyThuyetHeDieuHanh.exe.config
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\bin\Release\BaiTapLyThuyetHeDieuHanh.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\bin\Release\BaiTapLyThuyetHeDieuHanh.pdb
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\bin\Release\MaterialSkin.dll
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.csprojAssemblyReference.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.FormMain.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.Properties.Resources.resources
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.csproj.GenerateResource.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.csproj.CoreCompileInputs.cache
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.csproj.CopyComplete
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.exe
+C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\obj\Release\BaiTapLyThuyetHeDieuHanh.pdb
