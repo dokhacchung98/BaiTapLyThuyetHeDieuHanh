@@ -4,13 +4,9 @@ using PipesServerTest;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.IO.Pipes;
 using System.Messaging;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BaiTapLyThuyetHeDieuHanh
@@ -488,7 +484,7 @@ namespace BaiTapLyThuyetHeDieuHanh
 
 
         //Khi đóng form trả server và client về null
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             _pipeServer.PipeMessage -= new DelegateMessage(ListenResultPipe);
             _pipeServer = null;

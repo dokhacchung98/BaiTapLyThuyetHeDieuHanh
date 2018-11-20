@@ -51,11 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\EnumToken.cs" />
-    <Compile Include="GUI\Form1.cs">
+    <Compile Include="GUI\FormMessageQueue.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="GUI\FormMessageQueue.Designer.cs">
+      <DependentUpon>FormMessageQueue.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,8 +63,8 @@
     <Compile Include="Until\Scanner.cs" />
     <Compile Include="Until\TextState.cs" />
     <Compile Include="Until\Token.cs" />
-    <EmbeddedResource Include="GUI\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\FormMessageQueue.resx">
+      <DependentUpon>FormMessageQueue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
