@@ -420,24 +420,19 @@ namespace BaiTapLyThuyetHeDieuHanh
                     }
                 };
                 anotherProcess.Start();
-
-                anotherProcess.WaitForExit();
-
+                anotherProcess.Refresh();
+                
                 enableClickOk = false;
                 Console.WriteLine("dang chay");
-                new Thread(() =>
-                {
-                    while (lockW)
-                    {
-                        ListenResultShareMemory(anotherProcess);
-                    }
-                }).Start();
-
+                //new Thread(() =>
+                //{
+                //    while (lockW)
+                //    {
+                //        Console.WriteLine("chua tra ve");
+                //        ListenResultShareMemory(anotherProcess);
+                //    }
+                //}).Start();
             }
-
-
-
-            //ListenResultShareMemory();
         }
         
         private bool lockW = true;
@@ -455,7 +450,6 @@ namespace BaiTapLyThuyetHeDieuHanh
                         string text = Encoding.UTF8.GetString(bytes).Trim('\0');
                         lockW = false;
                         txtResult.Text = text;
-                        
                         anotherProcess.Kill();
                         // SendSuccess();
                     }

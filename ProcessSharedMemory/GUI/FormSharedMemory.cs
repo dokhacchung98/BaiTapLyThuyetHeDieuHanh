@@ -2,6 +2,7 @@
 using MaterialSkin;
 using ProcessMessageQueue.Until;
 using System;
+using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
 using System.Linq.Expressions;
 using System.Text;
@@ -80,19 +81,19 @@ namespace ProcessSharedMemory
 
                 txtResult.Text = TextState.TXTRESULT + _result;
 
-                SendResult();
+               // SendResult();
             }
             catch (Exception e)
             {
                 _result = e.Message;
                 txtResult.Text = e.Message;
-                SendResult();
+               // SendResult();
             }
         }
 
         private void SendResult()
         {
-            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver, 10000))
+            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver,10000))
             {
                 using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
                 {
@@ -100,6 +101,8 @@ namespace ProcessSharedMemory
                     viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
                 }
             }
+            txtState.Text = _result;
+            Thread.Sleep(50000);
         }
 
         private bool lockS = true;
