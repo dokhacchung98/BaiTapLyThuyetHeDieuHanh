@@ -66,11 +66,8 @@ namespace ProcessSharedMemory
             }
         }
 
-        int i = 0;
         private void Caculation()
         {
-            i++;
-            txtState.Text = i + "";
             try
             {
                 Scanner scanner = new Scanner(_receiver);
@@ -95,26 +92,18 @@ namespace ProcessSharedMemory
 
         private void SendResult()
         {
-            threadSuccess = new Thread(new ThreadStart(ListenSuccess));
-            //txtState.Text = TextState.STATESEND;
-            threadSuccess.Start();
-
-            while (lockW)
+            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver, 10000))
             {
-                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver, 10000))
+                using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
                 {
-                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
-                    {
-                        byte[] textBytes = Encoding.UTF8.GetBytes(_result);
-                        viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
-                    }
-
+                    byte[] textBytes = Encoding.UTF8.GetBytes(_result);
+                    viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
                 }
             }
-
-
         }
+
         private bool lockS = true;
+
         private void ListenSuccess()
         {
             while (lockS)

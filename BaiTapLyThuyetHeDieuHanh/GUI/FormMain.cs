@@ -405,7 +405,6 @@ namespace BaiTapLyThuyetHeDieuHanh
         {
             using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSend, 10000))
             {
-
                 using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
                 {
                     byte[] textBytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
@@ -420,25 +419,30 @@ namespace BaiTapLyThuyetHeDieuHanh
                         UseShellExecute = false
                     }
                 };
-
                 anotherProcess.Start();
+
+                anotherProcess.WaitForExit();
+
                 enableClickOk = false;
                 Console.WriteLine("dang chay");
-                while (lockW)
+                new Thread(() =>
                 {
-                    ListenResultShareMemory();
-                }
+                    while (lockW)
+                    {
+                        ListenResultShareMemory(anotherProcess);
+                    }
+                }).Start();
+
             }
 
 
 
             //ListenResultShareMemory();
         }
-
-        private Thread threadShareMemory;
+        
         private bool lockW = true;
 
-        private void ListenResultShareMemory()
+        private void ListenResultShareMemory(Process anotherProcess)
         {
             try
             {
@@ -451,12 +455,9 @@ namespace BaiTapLyThuyetHeDieuHanh
                         string text = Encoding.UTF8.GetString(bytes).Trim('\0');
                         lockW = false;
                         txtResult.Text = text;
-                        SendSuccess();
-                        if (threadShareMemory != null && threadShareMemory.IsAlive)
-                        {
-                            threadShareMemory.Abort();
-                        }
-                        return;
+                        
+                        anotherProcess.Kill();
+                        // SendSuccess();
                     }
                 }
             }
