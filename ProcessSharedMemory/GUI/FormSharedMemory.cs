@@ -5,6 +5,7 @@ using System;
 using System.IO.MemoryMappedFiles;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 
 namespace ProcessSharedMemory
 {
@@ -14,6 +15,12 @@ namespace ProcessSharedMemory
         private string _result = "";
         private static string fileSend = "file-send";
         private static string fileReceiver = "file-reiceiver";
+        private static string fileSuccess = "file-success";
+
+        private bool lockT = true;
+        private bool lockW = true;
+
+        private Thread threadSuccess;
 
         public Form1()
         {
@@ -29,30 +36,41 @@ namespace ProcessSharedMemory
             );
 
             SetupText();
-            
-                try
-                {
-                    using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.OpenExisting(fileSend))
-                    {
-                        using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
-                        {
-                            byte[] bytes = new byte[100];
-                            int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
-                            string text = Encoding.UTF8.GetString(bytes).Trim('\0');
-                            _receiver = text;
-                            Console.WriteLine("giatri: " + text);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            
+            while (lockT) { GetData(); }
+
         }
 
+        private void GetData()
+        {
+            try
+            {
+                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.OpenExisting(fileSend))
+                {
+                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                    {
+                        byte[] bytes = new byte[100];
+                        int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
+                        string text = Encoding.UTF8.GetString(bytes).Trim('\0');
+                        _receiver = text;
+                        txtReceiver.Text = TextState.TXTRECIVER + _receiver;
+                        lockT = false;
+                        Console.WriteLine("giatri: " + text);
+
+                        Caculation();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        int i = 0;
         private void Caculation()
         {
+            i++;
+            txtState.Text = i + "";
             try
             {
                 Scanner scanner = new Scanner(_receiver);
@@ -77,15 +95,46 @@ namespace ProcessSharedMemory
 
         private void SendResult()
         {
-            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver, 10000))
+            threadSuccess = new Thread(new ThreadStart(ListenSuccess));
+            //txtState.Text = TextState.STATESEND;
+            threadSuccess.Start();
+
+            while (lockW)
             {
-                using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver, 10000))
                 {
-                    byte[] textBytes = Encoding.UTF8.GetBytes(_result);
-                    viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
+                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                    {
+                        byte[] textBytes = Encoding.UTF8.GetBytes(_result);
+                        viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
+                    }
+
                 }
-                //Thread.Sleep(100);
             }
+
+
+        }
+        private bool lockS = true;
+        private void ListenSuccess()
+        {
+            while (lockS)
+            {
+                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSuccess, 10000))
+                {
+                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                    {
+                        byte[] textBytes = Encoding.UTF8.GetBytes(_result);
+                        viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
+                    }
+                    lockS = false;
+                    lockW = false;
+                    if (threadSuccess != null)
+                    {
+                        threadSuccess.Abort();
+                    }
+                }
+            }
+
         }
 
         private void SetupText()

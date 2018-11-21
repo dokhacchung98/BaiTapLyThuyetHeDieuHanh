@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO.MemoryMappedFiles;
 using System.Messaging;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace BaiTapLyThuyetHeDieuHanh
@@ -29,8 +30,14 @@ namespace BaiTapLyThuyetHeDieuHanh
         private PipeServer _pipeServer;
         //client gửi pipe
         private PipeClient _pipeClient;
-        private string fileSend = "file-send";
-        private string fileReceiver = "file-rêciver";
+
+        //Tên file send trong shared memory
+        private static string fileSend = "file-send";
+        //tên file receiver trong shared memory
+        private static string fileReceiver = "file-reiceiver";
+        private static string fileSuccess = "file-success";
+
+        private bool enableClickOk = true;
 
         public FormMain()
         {
@@ -274,7 +281,8 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            CallProcess();
+            if (enableClickOk)
+                CallProcess();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -367,7 +375,7 @@ namespace BaiTapLyThuyetHeDieuHanh
                 message.Body = stringBuilder.ToString();
                 //gửi sang process processmessagequeue
                 msgQueue.Send(message);
-
+                enableClickOk = false;
                 ListeningResultMessageQueue(anotherProcess);
             }
         }
@@ -388,6 +396,7 @@ namespace BaiTapLyThuyetHeDieuHanh
                 string m = message.Body.ToString();
                 txtResult.Text = m;
                 process.Kill();
+                enableClickOk = true;
             }
         }
 
@@ -396,12 +405,12 @@ namespace BaiTapLyThuyetHeDieuHanh
         {
             using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSend, 10000))
             {
+
                 using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
                 {
                     byte[] textBytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
                     viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
                 }
-
                 var anotherProcess = new Process
                 {
                     StartInfo =
@@ -413,11 +422,21 @@ namespace BaiTapLyThuyetHeDieuHanh
                 };
 
                 anotherProcess.Start();
-                //ListenResultShareMemory();
-                //Thread.Sleep(100);
+                enableClickOk = false;
+                Console.WriteLine("dang chay");
+                while (lockW)
+                {
+                    ListenResultShareMemory();
+                }
             }
+
+
+
+            //ListenResultShareMemory();
         }
 
+        private Thread threadShareMemory;
+        private bool lockW = true;
 
         private void ListenResultShareMemory()
         {
@@ -430,7 +449,14 @@ namespace BaiTapLyThuyetHeDieuHanh
                         byte[] bytes = new byte[100];
                         int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
                         string text = Encoding.UTF8.GetString(bytes).Trim('\0');
+                        lockW = false;
                         txtResult.Text = text;
+                        SendSuccess();
+                        if (threadShareMemory != null && threadShareMemory.IsAlive)
+                        {
+                            threadShareMemory.Abort();
+                        }
+                        return;
                     }
                 }
             }
@@ -438,6 +464,25 @@ namespace BaiTapLyThuyetHeDieuHanh
             {
                 Console.WriteLine("main: " + e.Message);
             }
+
+
+        }
+
+        private void SendSuccess()
+        {
+            new Thread(() =>
+            {
+                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSuccess, 10000))
+                {
+                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                    {
+                        byte[] textBytes = Encoding.UTF8.GetBytes("success");
+                        viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
+                    }
+                    Thread.Sleep(1000);
+                }
+            }).Start();
+
         }
 
         //gửi bằng giao thức pipe
@@ -458,6 +503,7 @@ namespace BaiTapLyThuyetHeDieuHanh
             //khởi tạo client để gửi
             _pipeClient = new PipeClient();
             _pipeClient.Send(stringBuilder.ToString(), nameServerSend, 1000);
+            enableClickOk = false;
         }
 
         //lắng nghe bên pipe trả kết quả về
@@ -474,6 +520,7 @@ namespace BaiTapLyThuyetHeDieuHanh
                 {
                     //hiển thị kết quả
                     txtResult.Text = message;
+                    enableClickOk = true;
                 }
             }
             catch (Exception ex)
