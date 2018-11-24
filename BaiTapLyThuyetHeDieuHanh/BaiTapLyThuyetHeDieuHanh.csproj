@@ -53,21 +53,20 @@
     <Compile Include="Control\PipeClient.cs" />
     <Compile Include="Control\PipeServer.cs" />
     <Compile Include="Enum\EnumToken.cs" />
-    <Compile Include="GUI\Form1.cs">
+    <Compile Include="GUI\FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="GUI\FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="CallBack\CallBackClick.cs" />
     <Compile Include="Model\MemoryMap.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Until\Parser.cs" />
     <Compile Include="Until\Scanner.cs" />
     <Compile Include="Until\Token.cs" />
-    <EmbeddedResource Include="GUI\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="GUI\FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

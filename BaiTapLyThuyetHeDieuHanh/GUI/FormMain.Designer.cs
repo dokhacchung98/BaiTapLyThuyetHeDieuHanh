@@ -626,10 +626,11 @@
             this.Controls.Add(this.panelNumber);
             this.Controls.Add(this.panel1);
             this.Name = "FormMain";
+            this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "B7- Đỗ Khắc Chung & Phạm Tiến Nam";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel1.ResumeLayout(false);
             this.panelNumber.ResumeLayout(false);
             this.panelNumber.PerformLayout();
