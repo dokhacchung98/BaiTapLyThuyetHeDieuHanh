@@ -2,7 +2,6 @@
 using MaterialSkin;
 using ProcessMessageQueue.Until;
 using System;
-using System.Diagnostics;
 using System.IO.MemoryMappedFiles;
 using System.Linq.Expressions;
 using System.Text;
@@ -14,7 +13,9 @@ namespace ProcessSharedMemory
     {
         private string _receiver = "";
         private string _result = "";
+        //Tên file send trong shared memory
         private static string fileSend = "file-send";
+        //tên file receiver trong shared memory
         private static string fileReceiver = "file-reiceiver";
         private static string fileSuccess = "file-success";
 
@@ -35,29 +36,37 @@ namespace ProcessSharedMemory
                 Primary.Blue500, Accent.LightBlue200,
                 TextShade.WHITE
             );
-
             SetupText();
             while (lockT) { GetData(); }
-
         }
 
+        //lấy dữ liệu từ process cha gửi đến bằng cách đọc file nhớ chung
         private void GetData()
         {
             try
             {
+                //khởi tạo memoryMapperFile với tên file là file-send
                 using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.OpenExisting(fileSend))
                 {
+                    //sử dụng viewAccessor để ánh xạ tới bộ nhớ cần truy câp
                     using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
                     {
+                        //khởi tạo 1 byte để đọc dữ liệu
                         byte[] bytes = new byte[100];
+                        //đọc dữ liệu từ file chung
                         int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
+                        //định dạng từ byte thành kiểu string
                         string text = Encoding.UTF8.GetString(bytes).Trim('\0');
-                        _receiver = text;
-                        txtReceiver.Text = TextState.TXTRECIVER + _receiver;
-                        lockT = false;
-                        Console.WriteLine("giatri: " + text);
+                        //đọc nếu dữ liệu ko trống
+                        if (text != null && text.Length > 0)
+                        {
+                            _receiver = text;
+                            txtReceiver.Text = TextState.TXTRECIVER + _receiver;
+                            lockT = false;
+                            Console.WriteLine("giatri: " + text);
+                            Caculation();
+                        }
 
-                        Caculation();
                     }
                 }
             }
@@ -67,6 +76,7 @@ namespace ProcessSharedMemory
             }
         }
 
+        //tính toán
         private void Caculation()
         {
             try
@@ -81,54 +91,29 @@ namespace ProcessSharedMemory
 
                 txtResult.Text = TextState.TXTRESULT + _result;
 
-               // SendResult();
+                SendResult();
             }
             catch (Exception e)
             {
                 _result = e.Message;
                 txtResult.Text = e.Message;
-               // SendResult();
+                SendResult();
             }
         }
 
+        //gửi trả dữ liệu về process cha
         private void SendResult()
         {
-            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileReceiver,10000))
+            new Thread(() =>
             {
-                using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
-                {
-                    byte[] textBytes = Encoding.UTF8.GetBytes(_result);
-                    viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
-                }
-            }
-            txtState.Text = _result;
-            Thread.Sleep(50000);
+                MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateOrOpen(fileReceiver, 10000);
+                MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor();
+                byte[] textBytes = Encoding.UTF8.GetBytes(_result);
+                viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
+                Close();
+            }).Start();
         }
-
-        private bool lockS = true;
-
-        private void ListenSuccess()
-        {
-            while (lockS)
-            {
-                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSuccess, 10000))
-                {
-                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
-                    {
-                        byte[] textBytes = Encoding.UTF8.GetBytes(_result);
-                        viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
-                    }
-                    lockS = false;
-                    lockW = false;
-                    if (threadSuccess != null)
-                    {
-                        threadSuccess.Abort();
-                    }
-                }
-            }
-
-        }
-
+        
         private void SetupText()
         {
             txtReceiver.Text = TextState.TXTRECIVER;

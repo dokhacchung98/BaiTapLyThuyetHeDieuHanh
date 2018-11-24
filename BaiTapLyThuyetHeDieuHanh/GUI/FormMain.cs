@@ -14,6 +14,7 @@ namespace BaiTapLyThuyetHeDieuHanh
 {
     public partial class FormMain : MaterialSkin.Controls.MaterialForm
     {
+        #region Declare Variable
         //là string mà người dùng nhập
         private StringBuilder stringBuilder;
         //giá trị khi click radio button: 1 là gửi theo message queue, 2 là gửi theo share memory, 3 là gửi theo pipe
@@ -22,23 +23,24 @@ namespace BaiTapLyThuyetHeDieuHanh
         private static string nameServerSend = "serverLTHDH1";
         //đây là tên server sẽ nhận kết quả sau khi tính toán
         private static string nameServerReceiver = "serverLTHDH2";
-
-        //khởi tọa delegate
+        //khởi tọa delegate new message
         public delegate void NewMessageDelegate(string NewMessage);
-
+        //Khởi tạo delegate settext
+        delegate void SetTextCallback(string text);
         //server gửi pipe
         private PipeServer _pipeServer;
         //client gửi pipe
         private PipeClient _pipeClient;
-
         //Tên file send trong shared memory
         private static string fileSend = "file-send";
         //tên file receiver trong shared memory
         private static string fileReceiver = "file-reiceiver";
-        private static string fileSuccess = "file-success";
-
+        //
         private bool enableClickOk = true;
 
+        #endregion
+
+        #region Main
         public FormMain()
         {
             InitializeComponent();
@@ -59,7 +61,9 @@ namespace BaiTapLyThuyetHeDieuHanh
 
             SetupButton();
         }
+        #endregion
 
+        #region Init Form
         /*Khởi tạo các button, và thay đổi kích thước của chúng*/
         private void SetupButton()
         {
@@ -125,21 +129,24 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         }
 
-        /*Khởi tạo server lắng nge client từ lúc bắt đầu*/
-        private void FormMain_Load(object sender, EventArgs e)
+        /*Xử lý khi người dùng tiến hành tính toán: tức là click vào button bằng*/
+        private void CallProcess()
         {
-            try
+            switch (_communicationType)
             {
-                _pipeServer.Listen(nameServerReceiver);
-                Console.WriteLine("Listening success");
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Listening faild");
+                case 1:
+                    SendWithMessageQueue();
+                    break;
+                case 2:
+                    SendWithSharedMemory();
+                    break;
+                case 3:
+                    SendWithPipe();
+                    break;
             }
         }
 
-        #region XuLyClick
+        #region Click Processing
         private void btnValue1_Click(object sender, EventArgs e)
         {
             stringBuilder.Append("1");
@@ -322,25 +329,25 @@ namespace BaiTapLyThuyetHeDieuHanh
         }
 
         #endregion
+        #endregion
 
-        /*Xử lý khi người dùng tiến hành tính toán: tức là click vào button bằng*/
-        private void CallProcess()
+        #region Create Client
+        /*Khởi tạo server lắng nge client từ lúc bắt đầu*/
+        private void FormMain_Load(object sender, EventArgs e)
         {
-            switch (_communicationType)
+            try
             {
-                case 1:
-                    SendWithMessageQueue();
-                    break;
-                case 2:
-                    SendWithSharedMemory();
-                    break;
-                case 3:
-                    SendWithPipe();
-                    break;
+                _pipeServer.Listen(nameServerReceiver);
+                Console.WriteLine("Listening success");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Listening faild");
             }
         }
+        #endregion
 
-
+        #region Message Queue
         /*Gửi dữ liệu giữa 2 process sử dụng message queue*/
         private void SendWithMessageQueue()
         {
@@ -400,86 +407,94 @@ namespace BaiTapLyThuyetHeDieuHanh
             }
         }
 
+        #endregion
+
+        #region Shared Memory
         //gửi bằng giao thức shared memory
         private void SendWithSharedMemory()
         {
+            new Thread(new ThreadStart(ListenResultShareMemory)).Start();
             using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSend, 10000))
             {
                 using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
                 {
+                    //Chuyển đổi đoạn string thành byte để chuyển sang process con
                     byte[] textBytes = Encoding.UTF8.GetBytes(stringBuilder.ToString());
+                    //ghi vào vùng nhớ chung
                     viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
-                }
-                var anotherProcess = new Process
-                {
-                    StartInfo =
+                    var anotherProcess = new Process
                     {
-                        FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.exe",
-                        CreateNoWindow = true,
-                        UseShellExecute = false
-                    }
-                };
-                anotherProcess.Start();
-                anotherProcess.Refresh();
-                
+                        StartInfo =
+                            {
+                                FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.exe",
+                                CreateNoWindow = false,
+                                UseShellExecute = false,
+                                RedirectStandardOutput = true
+                            }
+                    };
+                    
+                    anotherProcess.Start();
+                    anotherProcess.WaitForExit();
+                }
+
                 enableClickOk = false;
                 Console.WriteLine("dang chay");
-                //new Thread(() =>
-                //{
-                //    while (lockW)
-                //    {
-                //        Console.WriteLine("chua tra ve");
-                //        ListenResultShareMemory(anotherProcess);
-                //    }
-                //}).Start();
             }
+
         }
-        
+
         private bool lockW = true;
 
-        private void ListenResultShareMemory(Process anotherProcess)
+        private void ListenResultShareMemory()
         {
-            try
+            while (lockW)
             {
-                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.OpenExisting(fileReceiver))
+                try
                 {
-                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                    using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateOrOpen(fileReceiver, 10000))
                     {
-                        byte[] bytes = new byte[100];
-                        int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
-                        string text = Encoding.UTF8.GetString(bytes).Trim('\0');
-                        lockW = false;
-                        txtResult.Text = text;
-                        anotherProcess.Kill();
-                        // SendSuccess();
+                        using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
+                        {
+                            byte[] bytes = new byte[100];
+                            int res = viewAccessor.ReadArray(0, bytes, 0, bytes.Length);
+                            string text = Encoding.UTF8.GetString(bytes).Trim('\0');
+                            if (text != null && text.Length > 0)
+                            {
+                                lockW = false;
+                                SetText(text);
+                                enableClickOk = true;
+                                Console.WriteLine("doc thanh cong: " + text);
+                            }
+                            else if (text != null && text.Length == 0)
+                            {
+                                Console.WriteLine("doc ko thanh cong r");
+                            }
+                        }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("main: " + e.Message);
-            }
-
-
-        }
-
-        private void SendSuccess()
-        {
-            new Thread(() =>
-            {
-                using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateNew(fileSuccess, 10000))
+                catch (Exception e)
                 {
-                    using (MemoryMappedViewAccessor viewAccessor = memoryMappedFile.CreateViewAccessor())
-                    {
-                        byte[] textBytes = Encoding.UTF8.GetBytes("success");
-                        viewAccessor.WriteArray(0, textBytes, 0, textBytes.Length);
-                    }
-                    Thread.Sleep(1000);
+                    Console.WriteLine("send memory: " + e.Message);
                 }
-            }).Start();
-
+            }
         }
 
+        //Set text cho txtResult
+        private void SetText(string text)
+        {
+            if (this.txtResult.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.txtResult.Text = text;
+            }
+        }
+        #endregion
+
+        #region Pipe
         //gửi bằng giao thức pipe
         private void SendWithPipe()
         {
@@ -523,8 +538,9 @@ namespace BaiTapLyThuyetHeDieuHanh
                 Console.WriteLine(ex.Message);
             }
         }
+        #endregion
 
-
+        #region Exit Application
         //Khi đóng form trả server và client về null
         private void Form_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -532,5 +548,6 @@ namespace BaiTapLyThuyetHeDieuHanh
             _pipeServer = null;
             _pipeClient = null;
         }
+        #endregion
     }
 }
