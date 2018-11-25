@@ -35,8 +35,10 @@ namespace BaiTapLyThuyetHeDieuHanh
         private static string fileSend = "file-send";
         //tên file receiver trong shared memory
         private static string fileReceiver = "file-reiceiver";
-        //
+        //cho phép click vào nút ok
         private bool enableClickOk = true;
+        //biến tạm của shared memory
+        private bool lockW = true;
 
         #endregion
 
@@ -427,12 +429,12 @@ namespace BaiTapLyThuyetHeDieuHanh
                         StartInfo =
                             {
                                 FileName = @"C:\Users\hp\Desktop\Bài tập\BaiTapLyThuyetHeDieuHanh\BaiTapLyThuyetHeDieuHanh\ProcessSharedMemory\bin\Debug\ProcessSharedMemory.exe",
-                                CreateNoWindow = false,
+                                CreateNoWindow = true,
                                 UseShellExecute = false,
                                 RedirectStandardOutput = true
                             }
                     };
-                    
+
                     anotherProcess.Start();
                     anotherProcess.WaitForExit();
                 }
@@ -443,8 +445,7 @@ namespace BaiTapLyThuyetHeDieuHanh
 
         }
 
-        private bool lockW = true;
-
+        //lắng nghe tin nhắn trả về
         private void ListenResultShareMemory()
         {
             while (lockW)
